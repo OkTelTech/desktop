@@ -11,7 +11,6 @@ import type {DownloadedItems} from 'types/downloads';
 import BasePage, {ErrorState} from './BasePage';
 import DeveloperModeIndicator from './DeveloperModeIndicator';
 import DownloadsDropdownButton from './DownloadsDropdown/DownloadsDropdownButton';
-import ServerDropdownButton from './ServerDropdownButton';
 import TabBar from './TabBar';
 
 import {playSound} from '../notificationSounds';
@@ -461,20 +460,6 @@ class MainPage extends React.PureComponent<Props, State> {
             />
         ) : null;
 
-        const totalMentionCount = Object.keys(this.state.mentionsPerServer).reduce((sum, key) => {
-            // Strip out current server from unread and mention counts
-            if (key === this.state.activeServerId) {
-                return sum;
-            }
-            return sum + this.state.mentionsPerServer[key];
-        }, 0);
-        const hasAnyUnreads = Object.keys(this.state.unreadsPerServer).reduce((sum, key) => {
-            if (key === this.state.activeServerId) {
-                return sum;
-            }
-            return sum || this.state.unreadsPerServer[key];
-        }, false);
-
         const activeServer = this.state.servers.find((srv) => srv.id === this.state.activeServerId);
         const tabStatus = activeServer && this.getTabViewStatus();
         if (!tabStatus) {
@@ -498,19 +483,6 @@ class MainPage extends React.PureComponent<Props, State> {
                 errorMessage={tabStatus?.extra?.error}
                 errorUrl={tabStatus?.extra?.url}
             >
-                {activeServer && (
-                    <>
-                        <ServerDropdownButton
-                            isDisabled={this.state.modalOpen}
-                            activeServerName={activeServer.name}
-                            totalMentionCount={totalMentionCount}
-                            currentMentions={this.state.mentionsPerServer[this.state.activeServerId!]}
-                            currentUnread={this.state.unreadsPerServer[this.state.activeServerId!]}
-                            hasUnreads={hasAnyUnreads}
-                            isMenuOpen={this.state.isMenuOpen}
-                        />
-                    </>
-                )}
                 {tabsRow}
                 <DeveloperModeIndicator
                     developerMode={this.state.developerMode}

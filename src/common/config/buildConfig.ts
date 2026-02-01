@@ -6,7 +6,7 @@ import type {BuildConfig} from 'types/config';
 
 import {DEFAULT_ACADEMY_LINK, DEFAULT_HELP_LINK, DEFAULT_UPGRADE_LINK} from '../../common/constants';
 
-// For detailed guides, please refer to https://docs.mattermost.com/deployment/desktop-app-deployment.html
+// For detailed guides, please refer to https://docs.oktel.io/deployment/desktop-app-deployment.html
 
 /**
  * Build-time configuration. End-users can't change these parameters.
@@ -23,21 +23,21 @@ import {DEFAULT_ACADEMY_LINK, DEFAULT_HELP_LINK, DEFAULT_UPGRADE_LINK} from '../
  * @prop {[]} allowedProtocols - Defines which protocols should be automatically allowed
  */
 const buildConfig: BuildConfig = {
-    defaultServers: [/*
+    defaultServers: [
     {
-      name: 'example',
-      url: 'https://example.com'
+      name: 'OKtel',
+      url: 'https://oktel.io'
     }
-  */],
+  ],
     helpLink: DEFAULT_HELP_LINK,
     academyLink: DEFAULT_ACADEMY_LINK,
     upgradeLink: DEFAULT_UPGRADE_LINK,
     enableServerManagement: true,
     enableUpdateNotifications: true,
-    updateNotificationURL: 'https://releases.mattermost.com/desktop',
+    updateNotificationURL: 'https://releases.oktel.io/desktop',
     macAppStoreUpdateURL: 'macappstore://apps.apple.com/us/app/mattermost-desktop/id1614666244',
     windowsStoreUpdateURL: 'ms-windows-store://pdp/?productid=XP8BR8MH3LPKLT',
-    linuxUpdateURL: 'https://docs.mattermost.com/deployment-guide/desktop/linux-desktop-install.html',
+    linuxUpdateURL: 'https://docs.oktel.io/deployment-guide/desktop/linux-desktop-install.html',
     linuxGitHubReleaseURL: 'https://github.com/mattermost/desktop/releases/tag/v',
     managedResources: ['trusted'],
     allowedProtocols: [

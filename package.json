@@ -1,13 +1,13 @@
 {
-  "name": "mattermost-desktop",
-  "productName": "Mattermost",
+  "name": "oktel-desktop",
+  "productName": "OKTel",
   "version": "6.1.0-develop.1",
-  "description": "Mattermost",
+  "description": "OKTel",
   "main": "dist/index.js",
-  "author": "Mattermost, Inc. <feedback@mattermost.com>",
+  "author": "OKTel, Inc. <feedback@oktel.io>",
   "license": "Apache-2.0",
-  "desktopName": "Mattermost.Desktop",
-  "homepage": "https://mattermost.com",
+  "desktopName": "OKTel.Desktop",
+  "homepage": "https://oktel.io",
   "engines": {
     "node": ">=18.0.0"
   },
