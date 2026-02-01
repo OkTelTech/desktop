@@ -1,5 +1,5 @@
 {
-  "appId": "Mattermost.Desktop",
+  "appId": "OKTel.Desktop",
   "artifactName": "${version}/${name}-${version}-${os}-${arch}.${ext}",
   "directories": {
     "buildResources": "src/assets",
@@ -32,9 +32,9 @@
   ],
   "protocols": [
     {
-      "name": "Mattermost",
+      "name": "OKTel",
       "schemes": [
-        "mattermost"
+        "oktel"
       ]
     }
   ],
@@ -42,7 +42,7 @@
   "afterPack": "scripts/afterpack.js",
   "deb": {
     "artifactName": "${version}/${name}_${version}-1_${arch}.${ext}",
-    "synopsis": "Mattermost Desktop App",
+    "synopsis": "OKTel Desktop App",
     "depends": [
       "libnotify4",
       "libxtst6",
