@@ -15,6 +15,8 @@ import ViewManager from 'common/views/viewManager';
 import {handleShowSettingsModal} from 'main/app/intercom';
 import {localizeMessage} from 'main/i18nManager';
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 export function createAppMenu(): MenuItemConstructorOptions {
     const appName = app.name;
     return {
@@ -144,7 +146,7 @@ function getSettingsAndSignInToAnotherServerMenu(): MenuItemConstructorOptions[]
         },
     }];
 
-    if (Config.enableServerManagement === true && ServerManager.hasServers()) {
+    if (isDev && Config.enableServerManagement === true && ServerManager.hasServers()) {
         platformAppMenu.push({
             label: localizeMessage('main.menus.app.file.signInToAnotherServer', 'Sign in to Another Server'),
             click() {
