@@ -1,7 +1,7 @@
 {
   "name": "oktel-desktop",
   "productName": "OKTel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "OKTel",
   "main": "dist/index.js",
   "author": "OKTel, Inc. <feedback@oktel.io>",
