@@ -54,9 +54,9 @@ export class TrayIcon {
         switch (process.platform) {
         case 'win32':
             this.images = {
-                normal: nativeImage.createFromPath(path.resolve(assetsDir, 'windows/tray_oktel_normal.ico')),
-                unread: nativeImage.createFromPath(path.resolve(assetsDir, 'windows/tray_oktel_unread.ico')),
-                mention: nativeImage.createFromPath(path.resolve(assetsDir, 'windows/tray_oktel_mention.ico')),
+                normal: nativeImage.createFromPath(path.resolve(assetsDir, `windows/tray_${winTheme}.ico`)),
+                unread: nativeImage.createFromPath(path.resolve(assetsDir, `windows/tray_${winTheme}_unread.ico`)),
+                mention: nativeImage.createFromPath(path.resolve(assetsDir, `windows/tray_${winTheme}_mention.ico`)),
             };
             break;
         case 'darwin':

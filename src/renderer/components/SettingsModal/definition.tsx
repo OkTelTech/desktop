@@ -362,7 +362,7 @@ const definition: (intl: IntlShape) => Promise<SettingsDefinition> = async (intl
                 },
             ],
         },
-        ...(process.env.NODE_ENV !== 'production' ? {
+        ...(process.env.NODE_ENV === 'production' ? {} : {
             servers: {
                 title: (
                     <FormattedMessage
@@ -378,7 +378,7 @@ const definition: (intl: IntlShape) => Promise<SettingsDefinition> = async (intl
                     },
                 ],
             },
-        } : {}),
+        }),
         advanced: {
             title: (
                 <FormattedMessage

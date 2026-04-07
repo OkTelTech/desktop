@@ -24,11 +24,11 @@ import {DEFAULT_ACADEMY_LINK, DEFAULT_HELP_LINK, DEFAULT_UPGRADE_LINK} from '../
  */
 const buildConfig: BuildConfig = {
     defaultServers: [
-    {
-      name: 'OKtel',
-      url: 'https://oktel.io'
-    }
-  ],
+        {
+            name: 'OKtel',
+            url: 'https://oktel.io',
+        },
+    ],
     helpLink: DEFAULT_HELP_LINK,
     academyLink: DEFAULT_ACADEMY_LINK,
     upgradeLink: DEFAULT_UPGRADE_LINK,
