@@ -362,21 +362,23 @@ const definition: (intl: IntlShape) => Promise<SettingsDefinition> = async (intl
                 },
             ],
         },
-        servers: {
-            title: (
-                <FormattedMessage
-                    id='renderer.components.settingsPage.servers'
-                    defaultMessage='Servers'
-                />
-            ),
-            icon: 'server-variant',
-            settings: [
-                {
-                    id: 'servers',
-                    component: ServerSetting,
-                },
-            ],
-        },
+        ...(process.env.NODE_ENV === 'production' ? {} : {
+            servers: {
+                title: (
+                    <FormattedMessage
+                        id='renderer.components.settingsPage.servers'
+                        defaultMessage='Servers'
+                    />
+                ),
+                icon: 'server-variant',
+                settings: [
+                    {
+                        id: 'servers',
+                        component: ServerSetting,
+                    },
+                ],
+            },
+        }),
         advanced: {
             title: (
                 <FormattedMessage

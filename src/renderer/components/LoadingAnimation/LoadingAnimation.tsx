@@ -63,15 +63,15 @@ function LoadingAnimation({
         setTimeout(() => {
             setLoadingAnimationComplete(true);
         }, ANIMATION_COMPLETION_DELAY);
-    }, 'LoadingAnimation__compass-shrink');
+    }, 'LoadingAnimation__compass-pulse');
 
-    // listen for end of final css logo fade/shrink animation sequence
+    // listen for end of final css logo fade-out animation sequence
     useAnimationEnd<HTMLDivElement>(loadingIconContainerRef, () => {
         if (onLoadAnimationComplete) {
             onLoadAnimationComplete();
         }
         setAnimationState(LOADING_STATE.INITIALIZING);
-    }, 'LoadingAnimation__shrink');
+    }, 'LoadingAnimation__fade-out');
 
     return (
         <div

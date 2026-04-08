@@ -1,10 +1,11 @@
 {
-  "appId": "Mattermost.Desktop",
+  "appId": "OKTel.Desktop",
   "artifactName": "${version}/${name}-${version}-${os}-${arch}.${ext}",
   "directories": {
     "buildResources": "src/assets",
     "output": "release"
   },
+  "electronDist": "node_modules/electron/dist",
   "extraMetadata": {
     "main": "index.js"
   },
@@ -32,9 +33,9 @@
   ],
   "protocols": [
     {
-      "name": "Mattermost",
+      "name": "OKTel",
       "schemes": [
-        "mattermost"
+        "oktel"
       ]
     }
   ],
@@ -42,7 +43,7 @@
   "afterPack": "scripts/afterpack.js",
   "deb": {
     "artifactName": "${version}/${name}_${version}-1_${arch}.${ext}",
-    "synopsis": "Mattermost Desktop App",
+    "synopsis": "OKTel Desktop App",
     "depends": [
       "libnotify4",
       "libxtst6",
@@ -160,13 +161,7 @@
         "to": "gpo"
       }
     ],
-    "signExts": [".dll", ".node"],
-    "azureSignOptions": { 
-      "certificateProfileName": "mattermost-desktop-app",
-      "codeSigningAccountName": "DesktopAppCodeSigning",
-      "endpoint": "https://eus.codesigning.azure.net",
-      "publisherName": "CN=\"Mattermost, Inc.\", O=\"Mattermost, Inc.\", L=Palo Alto, S=California, C=US"
-    }
+    "signExts": [".dll", ".node"]
   },
   "msi": {
     "additionalWixArgs": ["-ext", "WixUtilExtension"],

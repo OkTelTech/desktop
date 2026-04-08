@@ -110,6 +110,13 @@ export class WebContentsEventManager {
                 return;
             }
 
+            // Allow file download URLs to pass through (Mattermost API, cloud storage presigned URLs)
+            if (parsedURL.searchParams.get('download') === '1' ||
+                (/\/api\/v\d+\/(public\/)?files\//).test(parsedURL.pathname) ||
+                parsedURL.searchParams.get('response-content-disposition')?.includes('attachment')) {
+                return;
+            }
+
             this.log(webContentsId).info('Prevented desktop from navigating to external URL');
             event.preventDefault();
         };

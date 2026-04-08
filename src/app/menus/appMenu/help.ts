@@ -14,86 +14,92 @@ import {localizeMessage} from 'main/i18nManager';
 import UpdateManager from 'main/updateNotifier';
 
 const log = new Logger('Help');
+const isDev = process.env.NODE_ENV !== 'production';
 
 export default function createHelpMenu(): MenuItemConstructorOptions {
     const submenu: MenuItemConstructorOptions[] = [];
-    if (Config.canUpgrade) {
+
+    // Dev only items
+    if (isDev) {
+        if (Config.canUpgrade) {
+            submenu.push({
+                label: localizeMessage('main.menus.app.help.checkForUpdates', 'Check for Updates'),
+                click() {
+                    UpdateManager.checkForUpdates(true);
+                },
+            });
+            submenu.push({type: 'separator'});
+        }
+
+        const serverId = ServerManager.getCurrentServerId();
+        const currentServer = serverId ? ServerManager.getServer(serverId) : undefined;
+        const currentRemoteInfo = currentServer ? ServerManager.getRemoteInfo(currentServer.id) : undefined;
+        const helpLink = currentRemoteInfo?.helpLink ?? Config.helpLink;
+        if (isHttpLink(helpLink)) {
+            submenu.push({
+                label: localizeMessage('main.menus.app.help.userGuide', 'User guide'),
+                click() {
+                    shell.openExternal(helpLink);
+                },
+            });
+        } else if (helpLink) {
+            log.debug('createHelpMenu', 'not rendering user guide link, link is invalid');
+        }
+        const academyLink = Config.academyLink;
+        if (isHttpLink(academyLink)) {
+            submenu.push({
+                label: localizeMessage('main.menus.app.help.academy', 'Mattermost Academy'),
+                click() {
+                    shell.openExternal(academyLink);
+                },
+            });
+        } else if (academyLink) {
+            log.debug('createHelpMenu', 'not rendering academy link, link is invalid');
+        }
+        submenu.push({type: 'separator'});
+
         submenu.push({
-            label: localizeMessage('main.menus.app.help.checkForUpdates', 'Check for Updates'),
+            id: 'Show logs',
+            label: localizeMessage('main.menus.app.help.ShowLogs', 'Show logs'),
             click() {
-                UpdateManager.checkForUpdates(true);
+                shell.showItemInFolder(transports.file.getFile().path);
             },
         });
+
+        submenu.push({
+            id: 'diagnostics',
+            label: localizeMessage('main.menus.app.help.RunDiagnostics', 'Run diagnostics'),
+            click() {
+                Diagnostics.run();
+            },
+        });
+
+        let reportProblemLink = currentRemoteInfo?.reportProblemLink;
+        if (!reportProblemLink) {
+            switch (currentRemoteInfo?.licenseSku) {
+            case 'enterprise':
+            case 'professional':
+                reportProblemLink = DEFAULT_EE_REPORT_PROBLEM_LINK;
+                break;
+            default:
+                reportProblemLink = DEFAULT_TE_REPORT_PROBLEM_LINK;
+                break;
+            }
+        }
+        if (isHttpLink(reportProblemLink)) {
+            submenu.push({
+                label: localizeMessage('main.menus.app.help.reportProblem', 'Report a problem'),
+                click() {
+                    shell.openExternal(reportProblemLink!);
+                },
+            });
+        } else if (reportProblemLink) {
+            log.debug('createHelpMenu', 'not rendering report a problem link, link is invalid');
+        }
         submenu.push({type: 'separator'});
     }
 
-    const serverId = ServerManager.getCurrentServerId();
-    const currentServer = serverId ? ServerManager.getServer(serverId) : undefined;
-    const currentRemoteInfo = currentServer ? ServerManager.getRemoteInfo(currentServer.id) : undefined;
-    const helpLink = currentRemoteInfo?.helpLink ?? Config.helpLink;
-    if (isHttpLink(helpLink)) {
-        submenu.push({
-            label: localizeMessage('main.menus.app.help.userGuide', 'User guide'),
-            click() {
-                shell.openExternal(helpLink);
-            },
-        });
-    } else if (helpLink) {
-        log.debug('createHelpMenu', 'not rendering user guide link, link is invalid');
-    }
-    const academyLink = Config.academyLink;
-    if (isHttpLink(academyLink)) {
-        submenu.push({
-            label: localizeMessage('main.menus.app.help.academy', 'Mattermost Academy'),
-            click() {
-                shell.openExternal(academyLink);
-            },
-        });
-    } else if (academyLink) {
-        log.debug('createHelpMenu', 'not rendering academy link, link is invalid');
-    }
-    submenu.push({type: 'separator'});
-
-    submenu.push({
-        id: 'Show logs',
-        label: localizeMessage('main.menus.app.help.ShowLogs', 'Show logs'),
-        click() {
-            shell.showItemInFolder(transports.file.getFile().path);
-        },
-    });
-
-    submenu.push({
-        id: 'diagnostics',
-        label: localizeMessage('main.menus.app.help.RunDiagnostics', 'Run diagnostics'),
-        click() {
-            Diagnostics.run();
-        },
-    });
-
-    let reportProblemLink = currentRemoteInfo?.reportProblemLink;
-    if (!reportProblemLink) {
-        switch (currentRemoteInfo?.licenseSku) {
-        case 'enterprise':
-        case 'professional':
-            reportProblemLink = DEFAULT_EE_REPORT_PROBLEM_LINK;
-            break;
-        default:
-            reportProblemLink = DEFAULT_TE_REPORT_PROBLEM_LINK;
-            break;
-        }
-    }
-    if (isHttpLink(reportProblemLink)) {
-        submenu.push({
-            label: localizeMessage('main.menus.app.help.reportProblem', 'Report a problem'),
-            click() {
-                shell.openExternal(reportProblemLink!);
-            },
-        });
-    } else if (reportProblemLink) {
-        log.debug('createHelpMenu', 'not rendering report a problem link, link is invalid');
-    }
-    submenu.push({type: 'separator'});
-
+    // Version info - always visible
     const version = localizeMessage('main.menus.app.help.versionString.desktop', 'Desktop App Version {version}{commit}', {
         version: app.getVersion(),
         // eslint-disable-next-line no-undef
@@ -113,16 +119,16 @@ export default function createHelpMenu(): MenuItemConstructorOptions {
             label: server.name,
             enabled: false,
         });
-        const version = ServerManager.getRemoteInfo(server.id)?.serverVersion;
+        const serverVersion = ServerManager.getRemoteInfo(server.id)?.serverVersion;
         const versionLabel = localizeMessage('main.menus.app.help.versionString.server', 'Server Version {version}', {
             name: server.name,
-            version: version ?? localizeMessage('main.menus.app.help.versionString.server.unavailable', 'Unavailable'),
+            version: serverVersion ?? localizeMessage('main.menus.app.help.versionString.server.unavailable', 'Unavailable'),
         });
         submenu.push({
             label: `    ${versionLabel}`,
-            enabled: version !== undefined,
+            enabled: serverVersion !== undefined,
             click() {
-                if (version) {
+                if (serverVersion) {
                     clipboard.writeText(versionLabel);
                 }
             },

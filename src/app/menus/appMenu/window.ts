@@ -11,6 +11,8 @@ import {localizeMessage} from 'main/i18nManager';
 
 import type {UniqueView} from 'types/config';
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 export default function createWindowMenu(): MenuItemConstructorOptions {
     const windowSubMenu: MenuItemConstructorOptions[] = [];
     windowSubMenu.push({
@@ -26,7 +28,7 @@ export default function createWindowMenu(): MenuItemConstructorOptions {
             label: localizeMessage('main.menus.app.window.zoom', 'Zoom'),
         }, {type: 'separator'});
     }
-    if (ServerManager.hasServers()) {
+    if (isDev && ServerManager.hasServers()) {
         windowSubMenu.push({
             label: localizeMessage('main.menus.app.window.showServers', 'Show Servers'),
             accelerator: `${process.platform === 'darwin' ? 'Cmd+Ctrl' : 'Ctrl+Shift'}+S`,

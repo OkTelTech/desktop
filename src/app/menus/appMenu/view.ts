@@ -14,6 +14,8 @@ import DeveloperMode from 'main/developerMode';
 import downloadsManager from 'main/downloadsManager';
 import {localizeMessage} from 'main/i18nManager';
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 export default function createViewMenu() {
     const devToolsSubMenu: MenuItemConstructorOptions[] = [
         {
@@ -188,10 +190,14 @@ export default function createViewMenu() {
         async click() {
             return clearAllData();
         },
-    }, {type: 'separator'}, {
-        label: localizeMessage('main.menus.app.view.devToolsSubMenu', 'Developer Tools'),
-        submenu: devToolsSubMenu,
     });
+
+    if (isDev) {
+        viewSubMenu.push({type: 'separator'}, {
+            label: localizeMessage('main.menus.app.view.devToolsSubMenu', 'Developer Tools'),
+            submenu: devToolsSubMenu,
+        });
+    }
 
     if (process.platform === 'linux') {
         viewSubMenu.push({type: 'separator'});
